@@ -28,7 +28,7 @@ public class Main extends javax.swing.JFrame {
     private MainForm main;
     private Animator animator;
 
-    public Main() {
+    public Main(String chucvu) {
         initComponents();
         init();
     }
@@ -173,9 +173,9 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void run() {
                 SwingAcrylic.prepareSwing();
-                Main frame = new Main();
-                frame.setVisible(true);
-                SwingAcrylic.processFrame(frame);
+//                Main frame = new Main();
+//                frame.setVisible(true);
+//                SwingAcrylic.processFrame(frame);
             }
         });
     }
