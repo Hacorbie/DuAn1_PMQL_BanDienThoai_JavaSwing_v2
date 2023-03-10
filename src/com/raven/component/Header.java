@@ -7,7 +7,15 @@ public class Header extends PanelTransparent {
 
     public Header() {
         initComponents();
+//        setTransparent(0.5f);
+        
+    }
+    public Header(String User, String Role) {
+        initComponents();
         setTransparent(0.5f);
+        lbUserName.setText(User);
+        lbRole.setText(Role);
+        
     }
 
     public void addMenuEvent(ActionListener event) {
