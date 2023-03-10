@@ -28,16 +28,17 @@ public class Main extends javax.swing.JFrame {
     private MainForm main;
     private Animator animator;
 
-    public Main(String chucvu) {
+    public Main(String chucvu, String taikhoan) {
         initComponents();
-        init();
+        init(taikhoan,chucvu);
+        
     }
 
-    private void init() {
+    private void init(String tk, String role) {
         layout = new MigLayout("fill", "10[]10[100%, fill]10", "10[fill, top]10");
         bg.setLayout(layout);
         menu = new Menu();
-        header = new Header();
+        header = new Header(tk,role);
         main = new MainForm();
         //  Init google icon font
         IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
