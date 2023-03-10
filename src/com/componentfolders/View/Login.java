@@ -38,7 +38,7 @@ public class Login extends javax.swing.JFrame {
             switch (dns.get(taikhoan, Mk)) {
                 case "MANAGER": {
                     JOptionPane.showMessageDialog(this, "Đăng nhập tài Khoản Quản Lý thành công!!");
-                    Main m = new Main(dns.get(taikhoan, Mk));
+                    Main m = new Main(dns.get(taikhoan, Mk),taikhoan);
                     m.setSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
                     m.setLocationRelativeTo(null);
                     m.setVisible(true);
@@ -47,7 +47,7 @@ public class Login extends javax.swing.JFrame {
                 }
                 case "STAFF": {
                     JOptionPane.showMessageDialog(this, "Đăng nhập tài Khoản Nhân Viên thành công!!");
-                    Main m = new Main(dns.get(taikhoan, Mk));
+                    Main m = new Main(dns.get(taikhoan, Mk),taikhoan);
                     m.setSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
                     m.setLocationRelativeTo(null);
                     m.setVisible(true);
