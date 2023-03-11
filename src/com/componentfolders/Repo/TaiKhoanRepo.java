@@ -15,7 +15,7 @@ public class TaiKhoanRepo {
     private DBConnections connections;
     public String get(String tk, String mk) {
         TaiKhoanModel g = new TaiKhoanModel();
-        String sql = "Select chucvu from taikhoan where taikhoan = ? and matkhau = ?";
+        String sql = "Select chucvu from NhanVien where taikhoan = ? and matkhau = ?";
         try (Connection con = connections.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, tk);
@@ -23,8 +23,12 @@ public class TaiKhoanRepo {
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
+                if(rs.getInt(1)== 0){
+                    g.setChucvu("MANAGER");
+                }else{
+                    g.setChucvu("STAFF");
+                }
                 
-                g.setChucvu(rs.getString(1));
                 
             }
             System.out.println(g.getChucvu());
