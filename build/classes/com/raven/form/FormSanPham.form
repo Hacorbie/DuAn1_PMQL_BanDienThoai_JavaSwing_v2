@@ -35,7 +35,7 @@
           <Color blue="9f" green="9f" red="9f" type="rgb"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="He"/>
+        <Property name="text" type="java.lang.String" value="Form S&#x1ea3;n Ph&#x1ea9;m"/>
       </Properties>
     </Component>
   </SubComponents>
