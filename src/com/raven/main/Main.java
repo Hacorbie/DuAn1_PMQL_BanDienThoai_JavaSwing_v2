@@ -5,6 +5,13 @@ import com.raven.component.Menu;
 import com.raven.event.EventMenuSelected;
 import com.raven.event.EventShowPopupMenu;
 import com.raven.form.Form1;
+import com.raven.form.FormBanHang;
+import com.raven.form.FormHoaDon;
+import com.raven.form.FormKhachHang;
+import com.raven.form.FormKhuyenMai;
+import com.raven.form.FormNhanVien;
+import com.raven.form.FormSanPham;
+import com.raven.form.FormThongKe;
 import com.raven.form.Form_Home;
 import com.raven.form.MainForm;
 import com.raven.swing.MenuItem;
@@ -51,6 +58,71 @@ public class Main extends javax.swing.JFrame {
                         main.showForm(new Form_Home());
                     } else if (subMenuIndex == 1) {
                         main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 1) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormSanPham());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 2) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormBanHang());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 3) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormHoaDon());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 4) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormKhuyenMai());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 5) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormNhanVien());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 6) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormKhachHang());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
+                    }
+                }
+                if (menuIndex == 1) {
+                    if (subMenuIndex == 0) {
+                        main.showForm(new FormThongKe());
+                    } else if (subMenuIndex == 1) {
+                        main.showForm(new Form1());
+                    } else if (subMenuIndex == 11) {
+                        main.showForm(new FormHoaDon());
                     }
                 }
             }
