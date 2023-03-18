@@ -1,8 +1,8 @@
 package com.raven.form;
 
-public class Form1 extends javax.swing.JPanel {
+public class FormThongKe extends javax.swing.JPanel {
 
-    public Form1() {
+    public FormThongKe() {
         initComponents();
         setOpaque(false);
     }
@@ -15,7 +15,7 @@ public class Form1 extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(159, 159, 159));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("He");
+        jLabel1.setText("Form Thống Kê");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
