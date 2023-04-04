@@ -41,7 +41,7 @@ create table PIN (
 	TENPIN NVARCHAR(50) not null,
 )
 --TAO BANG SANPHAM
-create table SANPHAM (
+create table SANPHAMCT (
 	ID int IDENTITY(1,1) Primary Key,
 	MASP VARCHAR(50) not null,
 	TENSP VARCHAR(50) not null,
@@ -61,7 +61,7 @@ create table SP (
 	ID int IDENTITY(1,1) Primary Key,
 	MaSP VARCHAR(50) not null,
 	TENSP VARCHAR(50) not null,
-	IDspct int FOREIGN KEY REFERENCES SanPham(ID)
+	IDspct int FOREIGN KEY REFERENCES SanPhamCT(ID)
 )
 
 --TAO BANG IMEI
@@ -70,7 +70,7 @@ create table IMEI (
 	MAIMEI VARCHAR(50) not null,
 	IMEI VARCHAR(50) not null,
 	TRANGTHAI int,
-	IDSP int FOREIGN KEY REFERENCES SANPHAM(ID),
+	IDSP int FOREIGN KEY REFERENCES SANPHAMCT(ID),
 )
 
 --TAO BANG NHANVIEN
@@ -117,7 +117,7 @@ create table HDCT (
 	ID int IDENTITY(1,1) Primary Key,
 	SOLUONG int,
 	IDHD int FOREIGN KEY REFERENCES HOADON(ID),
-	IDSP int FOREIGN KEY REFERENCES SANPHAM(ID),
+	IDSP int FOREIGN KEY REFERENCES SANPHAMCT(ID),
 	DONGIA MONEY
 )
 
@@ -137,7 +137,7 @@ create table KhuyenMai (
 --TAO BANG SPSALE
 create table SPKM (
 	ID int IDENTITY(1,1) Primary Key,
-	IDSP int FOREIGN KEY REFERENCES SANPHAM(ID),
+	IDSP int FOREIGN KEY REFERENCES SANPHAMCT(ID),
 	IDKM int FOREIGN KEY REFERENCES KhuyenMai(ID),
 )
 
