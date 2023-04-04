@@ -57,7 +57,12 @@ create table SANPHAM (
 	IDCHIP int FOREIGN KEY REFERENCES CHIP(ID),
 	IDHANG int FOREIGN KEY REFERENCES HANG(ID)
 )
-
+create table SP (
+	ID int IDENTITY(1,1) Primary Key,
+	MaSP VARCHAR(50) not null,
+	TENSP VARCHAR(50) not null,
+	IDspct int FOREIGN KEY REFERENCES SanPham(ID)
+)
 
 --TAO BANG IMEI
 create table IMEI (
