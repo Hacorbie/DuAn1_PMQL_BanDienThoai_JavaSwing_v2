@@ -34,7 +34,7 @@ create table ROM (
 	MAROM VARCHAR(50) not null,
 	DUNGLUONG int not null,
 )
---TAO BANG ROM
+--TAO BANG PIN
 create table PIN (
 	ID int IDENTITY(1,1) Primary Key,
 	MAPIN VARCHAR(50) not null,
@@ -61,6 +61,13 @@ create table SP (
 	ID int IDENTITY(1,1) Primary Key,
 	MaSP VARCHAR(50) not null,
 	TENSP VARCHAR(50) not null,
+	LoaiSP int,
+	IDspct int FOREIGN KEY REFERENCES SanPhamCT(ID)
+)
+create table NhaCungCap (
+	ID int IDENTITY(1,1) Primary Key,
+	MaNCC VARCHAR(50) not null,
+	TENNCC VARCHAR(50) not null,
 	IDspct int FOREIGN KEY REFERENCES SanPhamCT(ID)
 )
 
