@@ -1,16 +1,21 @@
 package com.raven.main;
 
+import com.componentfolders.View.Login;
 import com.raven.component.Header;
 import com.raven.component.Menu;
 import com.raven.event.EventMenuSelected;
 import com.raven.event.EventShowPopupMenu;
-import com.raven.form.Form1;
+
 import com.raven.form.FormBanHang;
 import com.raven.form.FormHoaDon;
 import com.raven.form.FormKhachHang;
+import com.raven.form.FormKhachHangCu;
 import com.raven.form.FormKhuyenMai;
+import com.raven.form.FormKhuyenMaiHH;
 import com.raven.form.FormNhanVien;
+import com.raven.form.FormNhanVienCu;
 import com.raven.form.FormSanPham;
+import com.raven.form.FormSanPhamDaBan;
 import com.raven.form.FormThongKe;
 import com.raven.form.Form_Home;
 import com.raven.form.MainForm;
@@ -21,6 +26,7 @@ import com.raven.swing.icon.IconFontSwing;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
@@ -34,6 +40,7 @@ public class Main extends javax.swing.JFrame {
     private Header header;
     private MainForm main;
     private Animator animator;
+    private Login login;
 
     public Main(String chucvu, String taikhoan) {
         initComponents();
@@ -54,38 +61,24 @@ public class Main extends javax.swing.JFrame {
             public void menuSelected(int menuIndex, int subMenuIndex) {
                 System.out.println("Menu Index : " + menuIndex + " SubMenu Index " + subMenuIndex);
                 if (menuIndex == 0) {
-                    if (subMenuIndex == 0) {
+                    if (subMenuIndex == -1) {
                         main.showForm(new Form_Home());
-                    } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
-                    } else if (subMenuIndex == 11) {
-                        main.showForm(new FormHoaDon());
                     }
                 }
                 if (menuIndex == 1) {
                     if (subMenuIndex == 0) {
                         main.showForm(new FormSanPham());
                     } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
-                    } else if (subMenuIndex == 11) {
-                        main.showForm(new FormHoaDon());
+                        main.showForm(new FormSanPhamDaBan());
                     }
                 }
                 if (menuIndex == 2) {
-                    if (subMenuIndex == 0) {
+                    if (subMenuIndex == -1) {
                         main.showForm(new FormBanHang());
-                    } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
-                    } else if (subMenuIndex == 11) {
-                        main.showForm(new FormHoaDon());
                     }
                 }
                 if (menuIndex == 3) {
-                    if (subMenuIndex == 0) {
-                        main.showForm(new FormHoaDon());
-                    } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
-                    } else if (subMenuIndex == 11) {
+                    if (subMenuIndex == -1) {
                         main.showForm(new FormHoaDon());
                     }
                 }
@@ -93,36 +86,42 @@ public class Main extends javax.swing.JFrame {
                     if (subMenuIndex == 0) {
                         main.showForm(new FormKhuyenMai());
                     } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
-                    } else if (subMenuIndex == 11) {
-                        main.showForm(new FormHoaDon());
+                        main.showForm(new FormKhuyenMaiHH());
                     }
                 }
                 if (menuIndex == 5) {
                     if (subMenuIndex == 0) {
                         main.showForm(new FormNhanVien());
                     } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
-                    } else if (subMenuIndex == 11) {
-                        main.showForm(new FormHoaDon());
+                        main.showForm(new FormNhanVienCu());
                     }
                 }
                 if (menuIndex == 6) {
                     if (subMenuIndex == 0) {
                         main.showForm(new FormKhachHang());
                     } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
+                        main.showForm(new FormKhachHangCu());
                     } else if (subMenuIndex == 11) {
                         main.showForm(new FormHoaDon());
                     }
                 }
-                if (menuIndex == 1) {
+                if (menuIndex == 7) {
                     if (subMenuIndex == 0) {
                         main.showForm(new FormThongKe());
                     } else if (subMenuIndex == 1) {
-                        main.showForm(new Form1());
+                        main.showForm(new FormThongKe());
                     } else if (subMenuIndex == 11) {
-                        main.showForm(new FormHoaDon());
+                        main.showForm(new FormThongKe());
+                    }
+                }
+                if (menuIndex == 8) {
+                    if (subMenuIndex == -1) {
+                       int input = JOptionPane.showConfirmDialog(rootPane, "Bạn có muốn Thoát?");
+                       if(input == 0){
+ 
+                           System.exit(0);
+                           
+                       }
                     }
                 }
             }
