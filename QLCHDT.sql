@@ -137,7 +137,8 @@ create table KhuyenMai (
 	NGAYKT DATE,
 	LOAIGIAMGIA int,
 	HINHTHUCGIAMGIA int,
-	GIATRIGIAM int
+	GIATRIGIAM int,
+	TrangThai int
 )
 
 --TAO BANG SPSALE
