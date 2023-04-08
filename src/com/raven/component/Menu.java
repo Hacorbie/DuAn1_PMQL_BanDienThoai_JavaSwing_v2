@@ -51,15 +51,15 @@ public class Menu extends PanelTransparent {
     }
 
     public void initMenuItem() {
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/1.png")), "Home", "Home", "Buttons", "Cards"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/2.png")), "Sản Phẩm", "Morris", "Flot", "Line"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/3.png")), "Bán Hàng", "Income", "Expense", "Profit"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/4.png")), "Hóa Đơn", "Hóa Đơn", "Hóa Đơn Giảm Giá", "User"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/5.png")), "Khuyến Mãi", "Sender", "Inbox", "User"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/6.png")), "Nhân Viên", "Menu 001", "Menu 002", "Menu 003"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/7.png")), "Khách Hàng", "Menu 001", "Menu 002", "Menu 003"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/8.png")), "Thống Kê", "Menu 001", "Menu 002", "Menu 003"));
-        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/14.png")), "Đăng Xuất"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/1.png")), "Home"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/2.png")), "Sản Phẩm", "Danh Sách Sản Phẩm", "Sản Phẩm Đã Bán"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/3.png")), "Bán Hàng"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/4.png")), "Hóa Đơn"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/5.png")), "Khuyến Mãi", "Tổng Hợp Khuyến Mãi", "Khuyến Mãi Đã Kết Thúc"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/6.png")), "Nhân Viên", "Hệ Thống Nhân Viên", "Nhân Viên Đã Nghỉ"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/7.png")), "Khách Hàng", "Danh Sách Khách Hàng", "Khách Hàng Cũ"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/8.png")), "Thống Kê", "Menu001", "Menu 002", "Menu 003"));
+        addMenu(new ModelMenu(new ImageIcon(getClass().getResource("/com/raven/icon/14.png")), "Thoát"));
     }
 
     private void addMenu(ModelMenu menu) {
