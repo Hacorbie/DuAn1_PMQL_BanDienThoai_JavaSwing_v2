@@ -1,11 +1,21 @@
 package com.raven.form;
 
+import com.componentfolders.Model.KhuyenMai;
+import com.componentfolders.Service.ITF.KhuyenMaiService;
+import com.componentfolders.Service.Impl.KhuyenMaiImpl;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 public class FormKhuyenMai extends javax.swing.JPanel {
+    private KhuyenMaiService kmsv = new KhuyenMaiImpl();
+    private DefaultTableModel defaultTableModel;
 
     public FormKhuyenMai() {
         initComponents();
         setOpaque(false);
+        LoadData();
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -14,7 +24,7 @@ public class FormKhuyenMai extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblKM = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -41,7 +51,7 @@ public class FormKhuyenMai extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblKM.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -49,7 +59,7 @@ public class FormKhuyenMai extends javax.swing.JPanel {
                 "Loại Mã", "Tên Mã", "Mã KM", "Mức Giảm", "Ngày Kết Thúc", "Trạng Thái"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblKM);
 
         jButton1.setText("Tất Cả");
 
@@ -230,7 +240,27 @@ public class FormKhuyenMai extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+    
+    public void LoadData(){
+        ArrayList<KhuyenMai> listkm= kmsv.getList();
+    defaultTableModel = (DefaultTableModel) tblKM.getModel();
+        defaultTableModel.setRowCount(0);
 
+            for (KhuyenMai kh : listkm) {                 
+                Object[] rowData ={
+                    kh.getHinhThucGiamGia() == 1 ? "Cho Hóa Đơn":"Cho Sản Phẩm",
+                    kh.getTen(),
+                    kh.getMaKM(),
+                    kh.getGiaTriGiam() + "%",
+                    kh.getNgayBatDau(),
+                    kh.getNgayKetThuc(),
+                    kh.getTrangthai() == 1 ? "Có Thể Áp Dụng":"Đã Hết Hạn"
+                         
+                };
+            defaultTableModel.addRow(rowData);
+        }
+
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -256,7 +286,7 @@ public class FormKhuyenMai extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblKM;
     private javax.swing.JTextField txtMaKM;
     private javax.swing.JTextField txtMucGiam;
     private javax.swing.JTextField txtTenKM;
