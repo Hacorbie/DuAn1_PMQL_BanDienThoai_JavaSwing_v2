@@ -6,6 +6,8 @@ package com.componentfolders.Utilities;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -18,7 +20,8 @@ public class DBConnections {
     public static final String PORT = "1433";
     public static final String DBNAME = "QLCHDT";
     public static final String USERNAME = "sa";
-    public static final String PASSWORD = "12345";
+    public static final String PASSWORD = "123123";
+    private static Connection con;
 
     /**
      * Get connection to MSSQL Server
@@ -40,6 +43,27 @@ public class DBConnections {
         return null;
     }
 
+    // tra lai mot tap doi tuong
+    public static ResultSet getDataFromQuery(String sql, Object... args) throws SQLException{
+        PreparedStatement pstm = getStmt(sql, args);
+        return pstm.executeQuery();
+    }
+    
+    // chuan bi truy van truoc khi thuc hien - cac varargs su dung dau 3 cham (...) sau kieu du lieu
+    public static PreparedStatement getStmt(String sql, Object... args) throws SQLException{
+        try{
+            con = getConnection();
+            PreparedStatement ps;
+            ps = con.prepareStatement(sql); //dung de trien khai cac cau lenh truy van thuong
+            for(int i = 0; i < args.length; i++){
+                ps.setObject(i + 1, args[i]);
+            }
+            return ps;
+        }catch(SQLException ex){
+            return  null;
+        }
+    }
+    
     public static void main(String[] args) {
         getConnection();
     }

@@ -23,13 +23,13 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        txtMatKhau.setText("12345678");
-        txtTaiKhoan.setText("nguyenmanha4003");
+        txtMatKhau.setText("150923");
+        txtTaiKhoan.setText("minhbdph24887");
     }
     public Login(String taikhoan) {
         initComponents();
-        txtMatKhau.setText("12345678");
-        txtTaiKhoan.setText("nguyenmanha4003");
+        txtMatKhau.setText("150923");
+        txtTaiKhoan.setText("minhbdph24887");
     }
     void signin() {
         String taikhoan = txtTaiKhoan.getText();
@@ -58,7 +58,7 @@ public class Login extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Sai Tài Khoản Hoặc Mật Khẩu! Vui Lòng Nhập Lại!");
                     break;
             }
-        } catch (HeadlessException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Sai Tài Khoản Hoặc Mật Khẩu! Vui Lòng Nhập Lại!");
         }
     }
