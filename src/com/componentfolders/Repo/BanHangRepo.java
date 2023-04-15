@@ -5,9 +5,11 @@
 package com.componentfolders.Repo;
 
 import com.componentfolders.Model.ChiTietSanPham;
+import com.componentfolders.Model.GioHang;
 import com.componentfolders.Model.HoaDonBanHang;
 import com.componentfolders.Model.HoaDonChiTietBanHang;
 import com.componentfolders.Model.KhuyenMai;
+import com.componentfolders.Model.MGGBanHang;
 import com.componentfolders.Utilities.DBConnections;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,17 +21,18 @@ public class BanHangRepo {
         private DBConnections connections;
         public ArrayList<ChiTietSanPham> getListSP(){
         ArrayList<ChiTietSanPham> listsp = new ArrayList<>();
-        String sql = "Select ID,IDHang,IDRam,IDMS,DonGia From sanphamct";
+        String sql = "Select ID,IDHang,IDRam,IDMS,DonGia,TenSP From sanphamct where TrangThai = 1";
         try(Connection con = connections.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 ChiTietSanPham sp = new ChiTietSanPham();
-                sp.setTenSanPham(rs.getString(1));
+                sp.setId(rs.getInt(1));
                 sp.setIdHang(rs.getInt(2));
                 sp.setIdRam(rs.getInt(3));
                 sp.setIdMauSac(rs.getInt(4));
                 sp.setDonGia(rs.getInt(5));
+                sp.setTenSanPham(rs.getString(6));
 
             
                 listsp.add(sp);
@@ -57,7 +60,7 @@ public class BanHangRepo {
     
     }
         public boolean addhd(HoaDonBanHang hd){
-        String sql = "INSERT INTO HoaDon(MaHD, TongTien, IDNV,IDKH, IDKM, NgayMua) VALUES (?, ?,?,?,?,'2022-03-29')";
+        String sql = "INSERT INTO HoaDon(MaHD, TongTien, IDNV,IDKH, IDKM, NgayMua) VALUES (?, ?,?,?,?,?)";
         try(Connection con = connections.getConnection();) {
            PreparedStatement ps = con.prepareStatement(sql);
            ps.setObject(1, hd.getMaHD());
@@ -65,6 +68,7 @@ public class BanHangRepo {
            ps.setObject(3, hd.getIdNhanVien());
            ps.setObject(4, hd.getIdKH());
            ps.setObject(5, hd.getIdKM());
+           ps.setObject(6, hd.getNgayMua());
            
            ps.executeUpdate();
            return true;
@@ -92,6 +96,21 @@ public class BanHangRepo {
         }
              
     }
+    public boolean UpdateSP(String sp){
+        String sql = "UPDATE SanPhamCT SET TrangThai = 0 WHERE ID = ?";
+        try(Connection con = connections.getConnection();) {
+           PreparedStatement ps = con.prepareStatement(sql);
+           ps.setObject(1, sp);
+           ps.executeUpdate();
+           return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+             
+    }
+    
     public ArrayList<KhuyenMai> MAGG(){
         ArrayList<KhuyenMai> lkm = new ArrayList<>();
         String sql = "select TEN,LoaiGiamGia,GiaTriGiam from KhuyenMai Where TrangThai = 1";
@@ -115,6 +134,94 @@ public class BanHangRepo {
         return lkm;
     
     }
+     public ArrayList<KhuyenMai> MAGG2(String IDSP){
+        ArrayList<KhuyenMai> lkm = new ArrayList<>();
+        String sql = "select TEN,GiaTriGiam from KhuyenMai join SPKM on KhuyenMai.ID = SPKM.IDKM Where SPKM.IDSP =?";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setObject(1, IDSP);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                KhuyenMai km = new KhuyenMai();
+                km.setTen(rs.getString(1));
+                km.setGiaTriGiam(Integer.parseInt(rs.getString(2)));   
+                lkm.add(km);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return lkm;
+    
+    }
+    public ArrayList<MGGBanHang> MAGGSP(int idsp){
+        ArrayList<MGGBanHang> lkm = new ArrayList<>();
+        String sql = "select IDKM From SPKM Where IDSP = ?";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setObject(1, idsp);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                MGGBanHang km = new MGGBanHang();
+                km.setIDKM(rs.getInt(1));
+                lkm.add(km);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return lkm;
+    
+    }
+    public int GiaTriGiamSP(String MAKM){
+        int gtgg = 0;
+            String sql = "select GiaTriGiam From KhuyenMai Where MAKM = ?";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setObject(1, MAKM);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                gtgg = rs.getInt(1);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+            
+    return gtgg;
+    }
+    public ArrayList<ChiTietSanPham> getListSPTheoHang(int Hang){
+        ArrayList<ChiTietSanPham> listsp = new ArrayList<>();
+        String sql = "Select ID,IDHang,IDRam,IDMS,DonGia,TenSP From sanphamct where TrangThai = 1 and IDHang = ?";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setObject(1, Hang);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                ChiTietSanPham sp = new ChiTietSanPham();
+                sp.setId(rs.getInt(1));
+                sp.setIdHang(rs.getInt(2));
+                sp.setIdRam(rs.getInt(3));
+                sp.setIdMauSac(rs.getInt(4));
+                sp.setDonGia(rs.getInt(5));
+                sp.setTenSanPham(rs.getString(6));
+
+            
+                listsp.add(sp);
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listsp;
+    }
+    
     
         
 }
