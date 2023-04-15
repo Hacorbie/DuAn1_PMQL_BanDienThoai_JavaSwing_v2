@@ -13,13 +13,13 @@ import java.util.Date;
 public class HoaDonBanHang {
        String MaHD;
        int TrangThai,idNhanVien,idKH,idKM,TongTien;
-       Date NgayMua;
+       String NgayMua;
 
-    public Date getNgayMua() {
+    public String getNgayMua() {
         return NgayMua;
     }
 
-    public void setNgayMua(Date NgayMua) {
+    public void setNgayMua(String NgayMua) {
         this.NgayMua = NgayMua;
     }
     
