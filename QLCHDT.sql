@@ -127,7 +127,8 @@ create table HDCT (
 	IDHD int FOREIGN KEY REFERENCES HOADON(ID),
 	IDSP int FOREIGN KEY REFERENCES SANPHAMCT(ID),
 	DONGIA MONEY,
-	TrangThai int
+	TrangThai int,
+	NgayMua date
 )
 
 --TAO BANG KhuyenMai
