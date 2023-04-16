@@ -117,6 +117,7 @@ create table HOADON (
 	IDKH int FOREIGN KEY REFERENCES KHACHHANG(ID),
 	IDKM int FOREIGN KEY REFERENCES KhuyenMai(ID),
 	TONGTIEN MONEY,
+	NgayMua date,
 	Mota nvarchar(50)
 )
 
@@ -127,8 +128,8 @@ create table HDCT (
 	IDHD int FOREIGN KEY REFERENCES HOADON(ID),
 	IDSP int FOREIGN KEY REFERENCES SANPHAMCT(ID),
 	DONGIA MONEY,
-	TrangThai int,
-	NgayMua date
+	TrangThai int
+	
 )
 
 --TAO BANG KhuyenMai
