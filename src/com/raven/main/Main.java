@@ -91,8 +91,6 @@ public class Main extends javax.swing.JFrame {
                 }
                 if (menuIndex == 5) {
                     if (subMenuIndex == 0) {
-                        main.showForm(new FormNhanVien());
-                    } else if (subMenuIndex == 1) {
                         main.showForm(new FormNhanVienCu());
                     }
                 }
@@ -106,15 +104,6 @@ public class Main extends javax.swing.JFrame {
                     }
                 }
                 if (menuIndex == 7) {
-                    if (subMenuIndex == 0) {
-                        main.showForm(new FormThongKe());
-                    } else if (subMenuIndex == 1) {
-                        main.showForm(new FormThongKe());
-                    } else if (subMenuIndex == 11) {
-                        main.showForm(new FormThongKe());
-                    }
-                }
-                if (menuIndex == 8) {
                     if (subMenuIndex == -1) {
                        int input = JOptionPane.showConfirmDialog(rootPane, "Bạn có muốn Thoát?");
                        if(input == 0){
