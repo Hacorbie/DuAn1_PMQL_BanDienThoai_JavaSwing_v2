@@ -248,6 +248,48 @@ public class BanHangRepo {
         }
         return listsp;
     }
+    public ArrayList<KhuyenMai> MAKH(){
+        ArrayList<KhuyenMai> lkm = new ArrayList<>();
+        String sql = "select ID From KhachHang";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                KhuyenMai km = new KhuyenMai();
+                km.setMaKM(rs.getString(1));
+                
+                lkm.add(km);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return lkm;
+    
+    }
+    public ArrayList<KhuyenMai> MANV(){
+        ArrayList<KhuyenMai> lkm = new ArrayList<>();
+        String sql = "select ID From NhanVien";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                KhuyenMai km = new KhuyenMai();
+                km.setMaKM(rs.getString(1));
+                
+                lkm.add(km);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return lkm;
+    
+    }
     
     
         
