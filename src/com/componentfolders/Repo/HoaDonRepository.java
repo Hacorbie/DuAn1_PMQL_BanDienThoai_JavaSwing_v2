@@ -24,7 +24,7 @@ public class HoaDonRepository {
 
     public List<HoaDon> getAll() {
         List<HoaDon> listHD = new ArrayList<>();
-        String query = "SELECT HOADON.MAHD, NHANVIEN.MANV,  KHACHHANG.MAKH, KHACHHANG.TEN, HOADON.TRANGTHAI, HOADON.TONGTIEN, HOADON.NgayMua, KhachHang.SDT\n"
+        String query = "SELECT HOADON.ID, NHANVIEN.MANV,  KHACHHANG.MAKH, KHACHHANG.TEN, HOADON.TRANGTHAI, HOADON.TONGTIEN, HOADON.NgayMua, KhachHang.SDT\n"
                 + "FROM HOADON JOIN NHANVIEN ON HOADON.IDNV = NHANVIEN.ID JOIN KHACHHANG ON HOADON.IDKH = KHACHHANG.ID";
         try ( Connection con = DBConnections.getConnection();  PreparedStatement ps = con.prepareStatement(query);) {
             ResultSet rs = ps.executeQuery();
@@ -45,6 +45,30 @@ public class HoaDonRepository {
                 khachHang.setTen(rs.getString(4));
                 khachHang.setSdt(rs.getString(8));
                 hoaDon.setKh(khachHang);
+
+                listHD.add(hoaDon);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return null;
+        }
+        return listHD;
+    }
+    public List<HoaDon> getAllHDCT(int abc) {
+        List<HoaDon> listHD = new ArrayList<>();
+        String query = "SELECT HDCT.IDHD, HDCT.IDSP,  SANPHAMCT.Tensp, HDCT.DONGIA FROM HDCT JOIN SanPhamCT on HDCT.IDSP = SanPhamCT.ID where HDCT.IDHD = ?";
+        try ( Connection con = DBConnections.getConnection();  PreparedStatement ps = con.prepareStatement(query);) {
+            ps.setObject(1, abc);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                HoaDon hoaDon = new HoaDon();
+                hoaDon.setID(rs.getInt(1));
+                hoaDon.setTRANGTHAI(rs.getInt(2));
+                hoaDon.setTONGTIEN(rs.getInt(4));
+                hoaDon.setMota(rs.getString(3));
 
                 listHD.add(hoaDon);
 
