@@ -25,7 +25,6 @@ public interface NhanVienService {
     String xoa(int id);
 
     String phucHoi(int id);
-    List<NhanVien> tkiem(String ma);
 
-   
+    List<NhanVien> tkiem(String ma);
 }

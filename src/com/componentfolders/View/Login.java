@@ -23,13 +23,13 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        txtMatKhau.setText("150923");
-        txtTaiKhoan.setText("minhbdph24887");
+        txtMatKhau.setText("12345678");
+        txtTaiKhoan.setText("nguyenmanha4003");
     }
     public Login(String taikhoan) {
         initComponents();
-        txtMatKhau.setText("150923");
-        txtTaiKhoan.setText("minhbdph24887");
+        txtMatKhau.setText("12345678");
+        txtTaiKhoan.setText("nguyenmanha4003");
     }
     void signin() {
         String taikhoan = txtTaiKhoan.getText();

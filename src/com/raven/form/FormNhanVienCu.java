@@ -16,7 +16,10 @@ public class FormNhanVienCu extends javax.swing.JPanel {
     private DefaultTableModel md;
     private ArrayList<NhanVien> list = new ArrayList<>();
     private NhanVienService nvSv = new NhanVienServiceImpl();
-    
+    private final String VALID_EMAIL_REGEX = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
+    private final String VALID_PHONENUMBER_REGEX = "0+([0-9]{9,10})\\b";
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     public FormNhanVienCu() {
         initComponents();
         setOpaque(false);
@@ -452,6 +455,9 @@ public class FormNhanVienCu extends javax.swing.JPanel {
         //                return;
         //            }
         //        }
+        if(!valiDate("add")){
+            return;
+        }
         String tennv = txttennv.getText();
 
         Boolean gioitinh = false;
@@ -482,7 +488,7 @@ public class FormNhanVienCu extends javax.swing.JPanel {
     }//GEN-LAST:event_btnthemActionPerformed
 
     private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
- int row = tblnhanvien.getSelectedRow();
+        int row = tblnhanvien.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Hãy chọn vào 1 dòng trên table");
             return;
@@ -496,7 +502,7 @@ public class FormNhanVienCu extends javax.swing.JPanel {
             return;
         }
         if (confirm == JOptionPane.YES_OPTION) {
-            nvSv.xoa(Integer.parseInt( txtId.getText()));
+            nvSv.xoa(Integer.parseInt(txtId.getText()));
             JOptionPane.showMessageDialog(this, "Xoá thành công");
             loadData(list);
             loadDataLuuTru(list);
@@ -504,13 +510,13 @@ public class FormNhanVienCu extends javax.swing.JPanel {
         } else {
             JOptionPane.showMessageDialog(this, "Xoá thất bại");
         }
-        
+
     }//GEN-LAST:event_btnxoaActionPerformed
 
     private void btnhoatdonglaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhoatdonglaiActionPerformed
-       khoiPhuc();
-       
-       
+        khoiPhuc();
+
+
     }//GEN-LAST:event_btnhoatdonglaiActionPerformed
 
     private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
@@ -573,7 +579,7 @@ public class FormNhanVienCu extends javax.swing.JPanel {
 
     private void tblluutruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblluutruMouseClicked
         mouseclickLuuTru();
-        
+
     }//GEN-LAST:event_tblluutruMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -618,19 +624,19 @@ public class FormNhanVienCu extends javax.swing.JPanel {
 
     private void timKiem() {
         md = (DefaultTableModel) tblnhanvien.getModel();
-        String maNV =txttimnv.getText().trim();
-       List<NhanVien> listsearch = nvSv.tkiem(maNV);
-       md.setRowCount(0);
+        String maNV = txttimnv.getText().trim();
+        List<NhanVien> listsearch = nvSv.tkiem(maNV);
+        md.setRowCount(0);
         for (NhanVien nhanVien : listsearch) {
             md.addRow(new Object[]{
-               nhanVien.getId(), nhanVien.getMaNV(), nhanVien.getTen(), nhanVien.getGioiTinh(), nhanVien.getChucVu(), nhanVien.geteMail(), nhanVien.getQueQuan(), nhanVien.getNgaySinh(), nhanVien.getTaiKhoan(), nhanVien.getMatKhau(), nhanVien.getTrangThai() 
+                nhanVien.getId(), nhanVien.getMaNV(), nhanVien.getTen(), nhanVien.getGioiTinh(), nhanVien.getChucVu(), nhanVien.geteMail(), nhanVien.getQueQuan(), nhanVien.getNgaySinh(), nhanVien.getTaiKhoan(), nhanVien.getMatKhau(), nhanVien.getTrangThai()
             });
         }
-        
+
     }
 
     private void loadDataLuuTru(ArrayList<NhanVien> list) {
-         md = (DefaultTableModel) tblluutru.getModel();
+        md = (DefaultTableModel) tblluutru.getModel();
         md.setRowCount(0);
         for (NhanVien nhanVien : nvSv.luuTru()) {
             md.addRow(new Object[]{
@@ -655,24 +661,45 @@ public class FormNhanVienCu extends javax.swing.JPanel {
             return;
         }
         if (confirm == JOptionPane.YES_OPTION) {
-            nvSv.phucHoi(Integer.parseInt( txtId.getText()));
+            nvSv.phucHoi(Integer.parseInt(txtId.getText()));
             JOptionPane.showMessageDialog(this, "Khôi phục thành công");
             loadData(list);
             loadDataLuuTru(list);
             return;
-            
+
         } else {
             JOptionPane.showMessageDialog(this, "Khôi phục thất bại");
         }
     }
 
     private void mouseclickLuuTru() {
-       int row = tblluutru.getSelectedRow();
+        int row = tblluutru.getSelectedRow();
         if (row <= -1) {
             return;
-           
+
         }
         txtId.setText(tblluutru.getValueAt(row, 0).toString());
-        
+
+    }
+
+    private boolean valiDate(String check) {
+        if (txtmanv.getText().isEmpty() || txttennv.getText().isEmpty() || txtemail.getText().isEmpty() || txtque.getText().isEmpty() || txttaikhoan.getText().isEmpty()
+                || txtmatkhau.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Thong Tin Trong");
+            return false;
+        }
+        if (!txtemail.getText().trim().matches(VALID_EMAIL_REGEX)) {
+            JOptionPane.showMessageDialog(this, "Email Khong Dung Dinh Dang");
+            return false;
+        }
+        if(txttaikhoan.getText().trim().length() < 8){
+            JOptionPane.showMessageDialog(this, "Tai Khoan Phai Tren 8 ki tu");
+            return false;
+        }
+        if(txtmatkhau.getText().trim().length() < 8){
+            JOptionPane.showMessageDialog(this, "Mat Khau Phai Co Tren 8 Ki Tu");
+            return false;
+        }
+        return true;
     }
 }
