@@ -14,7 +14,7 @@ public class KhachHang {
     private String maKH;
     private String ten;
     private int gioiTinh =0;
-    private String email;
+    private String email,sdt;
     private String queQuan;
     private String ngaySinh;
 
@@ -26,6 +26,12 @@ public class KhachHang {
         this.email = email;
         this.queQuan = queQuan;
         this.ngaySinh = ngaySinh;
+    }
+    public String getSdt(){
+        return sdt;
+    }
+    public void setSdt(){
+        this.sdt = sdt;
     }
 
     public int getId() {
