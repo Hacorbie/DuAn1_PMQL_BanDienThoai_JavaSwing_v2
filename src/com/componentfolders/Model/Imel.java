@@ -9,6 +9,7 @@ package com.componentfolders.Model;
  * @author BuiDucMinh
  */
 public class Imel {
+
     private int id;
     private String maImel;
     private String tenImel;
@@ -70,6 +71,4 @@ public class Imel {
     public String toString() {
         return "Imel{" + "id=" + id + ", maImel=" + maImel + ", tenImel=" + tenImel + ", TrangThai=" + TrangThai + ", idSP=" + idSP + '}';
     }
-    
 }
-

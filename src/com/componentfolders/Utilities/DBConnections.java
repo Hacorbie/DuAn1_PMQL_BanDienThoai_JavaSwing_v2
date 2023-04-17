@@ -66,5 +66,6 @@ public class DBConnections {
     
     public static void main(String[] args) {
         getConnection();
+        System.out.println("Thanh Cong");
     }
 }

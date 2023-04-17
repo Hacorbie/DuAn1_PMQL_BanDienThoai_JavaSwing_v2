@@ -37,7 +37,7 @@ public class ChiTietSanPhamReponsitory {
         return null;
     }
 
-        public List<ChiTietSanPham> getAllCTSPLuuTru() {
+    public List<ChiTietSanPham> getAllCTSPLuuTru() {
         String sql = "select ID, MASP, TENSP, DONGIA, MOTA, URLANH, SOLUONG, TRANGTHAI, IDMS, IDPIN, IDRAM, IDROM, IDCHIP, IDHANG from SANPHAMCT where TRANGTHAI=1";
         try ( Connection con = DBConnections.getConnection();  PreparedStatement ps = con.prepareStatement(sql)) {
             ArrayList<ChiTietSanPham> list = new ArrayList<>();
@@ -52,18 +52,10 @@ public class ChiTietSanPhamReponsitory {
         }
         return null;
     }
-    
+
     public List<ChiTietSanPham> timKiemSP(String tenSP) {
         List<ChiTietSanPham> list = new ArrayList<>();
-        String sql = "select SANPHAMCT.MASP, SANPHAMCT.TENSP, SANPHAMCT.DONGIA, SANPHAMCT.MOTA, SANPHAMCT.URLANH, SANPHAMCT.SOLUONG, SANPHAMCT.TRANGTHAI, MAUSAC.TENMAU, PIN.TENPIN, RAM.DUNGLUONG, ROM.DUNGLUONG, CHIP.TENCHIP, HANG.TENHANG \n"
-                + "from SANPHAMCT, MAUSAC, PIN, RAM, ROM, CHIP, HANG\n"
-                + "where SANPHAMCT.IDMS = MAUSAC.ID\n"
-                + "and SANPHAMCT.IDPIN = PIN.ID\n"
-                + "and SANPHAMCT.IDRAM = RAM.ID\n"
-                + "and SANPHAMCT.IDROM = ROM.ID\n"
-                + "and SANPHAMCT.IDCHIP = CHIP.ID\n"
-                + "and SANPHAMCT.IDHANG = HANG.ID\n"
-                + "and SANPHAMCT.TENSP like ?";
+        String sql = "select ID, MASP, TENSP, DONGIA, MOTA, URLANH, SOLUONG, TRANGTHAI, IDMS, IDPIN, IDRAM, IDROM, IDCHIP, IDHANG from SANPHAMCT where TENSP like ?";
         try {
             ResultSet rs = DBConnections.getDataFromQuery(sql, tenSP);
             while (rs.next()) {
@@ -71,6 +63,8 @@ public class ChiTietSanPhamReponsitory {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ChiTietSanPham.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Loi Tai Tim Kiem Reponsitory");
+            System.out.println(ex);
         }
         return list;
     }
@@ -133,16 +127,20 @@ public class ChiTietSanPhamReponsitory {
         }
         return kiemTra > 0;
     }
-    
-    public boolean phucHoi(int idPhuHoi){
+
+    public boolean phucHoi(int idPhuHoi) {
         String sql = "update SANPHAMCT set TRANGTHAI=0 where Id=?";
         int kiemTra = 0;
-        try(Connection con = DBConnections.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try ( Connection con = DBConnections.getConnection();  PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setObject(1, idPhuHoi);
             kiemTra = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
         return kiemTra > 0;
+    }
+
+    public static void main(String[] args) {
+        new ChiTietSanPhamReponsitory().getAllCTSP().forEach(x -> System.out.println(x.toString()));
     }
 }

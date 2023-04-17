@@ -3,6 +3,7 @@ package com.raven.form;
 import com.componentfolders.Model.ChiTietSanPham;
 import com.componentfolders.Model.Chip;
 import com.componentfolders.Model.Hang;
+import com.componentfolders.Model.Imel;
 import com.componentfolders.Model.MauSac;
 import com.componentfolders.Model.Pin;
 import com.componentfolders.Model.Ram;
@@ -10,6 +11,7 @@ import com.componentfolders.Model.Rom;
 import com.componentfolders.Service.ITF.ChiTietSanPhamService;
 import com.componentfolders.Service.ITF.ChipService;
 import com.componentfolders.Service.ITF.HangService;
+import com.componentfolders.Service.ITF.ImelService;
 import com.componentfolders.Service.ITF.MauSacService;
 import com.componentfolders.Service.ITF.PinService;
 import com.componentfolders.Service.ITF.RamService;
@@ -17,6 +19,7 @@ import com.componentfolders.Service.ITF.RomService;
 import com.componentfolders.Service.Impl.ChiTietSanPhamServiceImpl;
 import com.componentfolders.Service.Impl.ChipServiceImpl;
 import com.componentfolders.Service.Impl.HangServiceImpl;
+import com.componentfolders.Service.Impl.ImelServiceImpl;
 import com.componentfolders.Service.Impl.MauSacServiceImpl;
 import com.componentfolders.Service.Impl.PinServiceImpl;
 import com.componentfolders.Service.Impl.RamServiceImpl;
@@ -44,6 +47,7 @@ public class FormSanPham extends javax.swing.JPanel {
     private final RomService romService;
     private final HangService hangService;
     private final MauSacService mauSacService;
+    private final ImelService imelService;
     private List<ChiTietSanPham> list = new ArrayList<>();
     private DefaultTableModel tableModel;
     private String chon;
@@ -61,6 +65,7 @@ public class FormSanPham extends javax.swing.JPanel {
         romService = new RomServiceImpl();
         hangService = new HangServiceImpl();
         mauSacService = new MauSacServiceImpl();
+        imelService = new ImelServiceImpl();
         loadData(list);
         listLuuTru(list);
         loadCbbChip(listChips);
@@ -100,6 +105,10 @@ public class FormSanPham extends javax.swing.JPanel {
         for (MauSac mauSac : mauSacService.getAllMS()) {
             cbbmausac.addItem(mauSac.getTenMauSac());
         }
+        cbbdanhsachimel.removeAllItems();
+        for (Imel imel : imelService.getAllImels()) {
+            cbbdanhsachimel.addItem(imel.getTenImel());
+        }
     }
 
     private void loadData(List<ChiTietSanPham> list) {
@@ -132,7 +141,6 @@ public class FormSanPham extends javax.swing.JPanel {
         txtdongia.setText(tbsanpham.getValueAt(index, 3).toString());
         txtsoluong.setText(tbsanpham.getValueAt(index, 6).toString());
         txtmota.setText(tbsanpham.getValueAt(index, 4).toString());
-        lblanhsp.setText(tbsanpham.getValueAt(index, 5).toString());
         if (tbsanpham.getValueAt(index, 5) != null) {
             lblanhsp.setText("");
             ImageIcon imageIcon = new ImageIcon("images/" + tbsanpham.getValueAt(index, 5).toString());
@@ -151,11 +159,11 @@ public class FormSanPham extends javax.swing.JPanel {
         cbbmausac.setSelectedItem((String) tbsanpham.getValueAt(index, 7).toString());
     }
 
-    private void mouseClickPhucHoi(){
+    private void mouseClickPhucHoi() {
         int index = tbsanphamphuchoi.getSelectedRow();
         lblidspph.setText(tbsanphamphuchoi.getValueAt(index, 0).toString());
     }
-    
+
     private boolean validateFrom(String check) {
         if (txtmasp.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ma San Pham Trong");
@@ -325,6 +333,11 @@ public class FormSanPham extends javax.swing.JPanel {
         from.setVisible(true);
     }
 
+    private void fromImel(){
+        FromImel from = new FromImel();
+        from.setVisible(true);
+    }
+    
     private void chonAnh() {
         try {
             JFileChooser jfc = new JFileChooser("D:\\IT\\Lap_Trinh_Java_3(SOF203)\\Assignment\\Bai_Tap_Assignment\\assignment\\images");
@@ -350,6 +363,19 @@ public class FormSanPham extends javax.swing.JPanel {
         txtdongia.setText("");
         txtmota.setText("");
         txtsoluong.setText("");
+    }
+
+    private void searchSanPham() {
+        tableModel = (DefaultTableModel) tbsanpham.getModel();
+        String tenSP = txtsearch.getText().trim();
+        List<ChiTietSanPham> listSearch = chiTietSanPhamService.timKiemSP(tenSP);
+        tableModel.setRowCount(0);
+        for (ChiTietSanPham ctsp : listSearch) {
+            tableModel.addRow(new Object[]{
+                ctsp.getId(), ctsp.getMaSanPham(), ctsp.getTenSanPham(), ctsp.getDonGia(), ctsp.getMoTa(), ctsp.getAnhSanPham(), ctsp.getSoLuong(),
+                ctsp.getIdMauSac(), ctsp.getIdHang(), ctsp.getIdChip(), ctsp.getIdRam(), ctsp.getIdRom(), ctsp.getIdPin()
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -417,13 +443,18 @@ public class FormSanPham extends javax.swing.JPanel {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("San Pham"));
 
         btnsearch.setText("Tim Kiem");
+        btnsearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsearchActionPerformed(evt);
+            }
+        });
 
         tbsanpham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Ma SP", "Ten SP", "Don Gia", "Mo Ta", "Anh SP", "So Luong", "Mau Sac", "Hang", "Chip", "Ram", "Rom", "Pin"
+                "ID", "Ma SP", "Ten SP", "Don Gia", "Mo Ta", "Anh SP", "So Luong"
             }
         ));
         tbsanpham.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -684,6 +715,11 @@ public class FormSanPham extends javax.swing.JPanel {
         });
 
         jButton6.setText("Cap Nhat");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("Ma San Pham:");
 
@@ -984,6 +1020,16 @@ public class FormSanPham extends javax.swing.JPanel {
         // TODO add your handling code here:
         mouseClickPhucHoi();
     }//GEN-LAST:event_tbsanphamphuchoiMouseClicked
+
+    private void btnsearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsearchActionPerformed
+        // TODO add your handling code here:
+        searchSanPham();
+    }//GEN-LAST:event_btnsearchActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        fromImel();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btncapnhat;
