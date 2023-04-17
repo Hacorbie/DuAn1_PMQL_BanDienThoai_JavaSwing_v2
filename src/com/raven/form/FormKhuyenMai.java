@@ -20,6 +20,7 @@ public class FormKhuyenMai extends javax.swing.JPanel {
         setOpaque(false);
         LoadData();
         LoadDataSP();
+        
     }
     
     @SuppressWarnings("unchecked")

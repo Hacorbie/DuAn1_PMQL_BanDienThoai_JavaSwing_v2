@@ -1,81 +1,108 @@
 package com.raven.form;
 
+import com.componentfolders.Utilities.DBConnections;
+import com.raven.bar.BarcharRepo;
+import com.raven.bar.ModelBarChart;
+import com.raven.chart.blankchart.ModelData;
 import com.raven.dialog.Message;
+import com.raven.javaswingdev.chart.ModelPieChart;
+import com.raven.javaswingdev.chart.PieChart;
+import com.raven.javaswingdev.chart.PieChartRepo;
 import com.raven.main.Main;
 import com.raven.model.ModelCard;
-import com.raven.model.ModelStudent;
 import com.raven.swing.icon.GoogleMaterialDesignIcons;
 import com.raven.swing.icon.IconFontSwing;
-import com.raven.swing.noticeboard.ModelNoticeBoard;
-import com.raven.swing.table.EventAction;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import raven.chart.ModelChart;
 
 public class Form_Home extends javax.swing.JPanel {
-
+        private PieChartRepo repo = new PieChartRepo();
+    private ModelPieChart md = new ModelPieChart();
+        private BarcharRepo alr = new BarcharRepo();
+        private DBConnections connections;
+        
     public Form_Home() {
         initComponents();
-        table1.fixTable(jScrollPane1);
         setOpaque(false);
         initData();
+        loadChart();
+        loadBar();
+        loadChartt();
     }
 
     private void initData() {
         initCardData();
-        initNoticeBoard();
-        initTableData();
     }
+    public void loadChart(){
+        pieChart1.setBackground(Color.white);
+        pieChart1.setChartType(PieChart.PeiChartType.DONUT_CHART);
+        pieChart1.addData(new ModelPieChart("Điện Thoại Đã Bán", repo.XenTrong(), new Color(23, 126, 238)));
+        pieChart1.addData(new ModelPieChart("Điện Thoại Còn", repo.XeDangChoThue(), new Color(221, 65, 65)));
+        
+    }
+    public void loadChartt(){
+        curveLineChart1.setTitle("Thống Kê Lịch Sử Doanh Thu");
+        curveLineChart1.addLegend("Thu Nhập", Color.yellow, Color.yellow);
+        curveLineChart1.addLegend("Hóa Đơn", Color.red, Color.red);
+        
+        setData();
 
-    private void initTableData() {
-        EventAction eventAction = new EventAction() {
-            @Override
-            public void delete(ModelStudent student) {
-                showMessage("Delete Student : " + student.getName());
+    }
+    private void setData(){
+        ArrayList<ModelData> listt = new ArrayList<>();
+        String sql = "Select Month(NgayMua),count(Month(NgayMua)), Sum(TongTien) From HoaDon Group By Month(NgayMua) order by Month(NgayMua) desc ";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                String Month = rs.getString(1);
+                double Tien = rs.getDouble(3);
+                double Hd = rs.getDouble(2);
+                listt.add(new ModelData(Month,Tien,Hd));
+                
+                
             }
-
-            @Override
-            public void update(ModelStudent student) {
-                showMessage("Update Student : " + student.getName());
+            for (int i = listt.size() - 1; i >= 0; i--) {
+                ModelData d = listt.get(i);
+                curveLineChart1.addData(new ModelChart(d.getMonth(),new double[]{d.getHD(),d.getTien()}));
             }
-        };
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile.jpg")), "Jonh", "Male", "Java", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile1.jpg")), "Dara", "Male", "C++", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
-        table1.addRow(new ModelStudent(new ImageIcon(getClass().getResource("/com/raven/icon/profile2.jpg")), "Bora", "Male", "C#", 300).toRowTable(eventAction));
+            curveLineChart1.start();
+        }catch(Exception e){
+            
+        }
+    }
+    private void pieChart1MouseClicked(java.awt.event.MouseEvent evt) {                                       
+        // TODO add your handling code here:
+        pieChart1.clearData();
+        loadChart();
+    }
+    public void loadBar(){
+        barChart1.addLegend("Top 5 Điện Thoại Được Mua Nhiều Nhất", new Color(245, 189, 135));
+        barChart1.addData(new ModelBarChart(alr.XeTop1(), new double[]{alr.LanthueXeTop1()}));
+        barChart1.addData(new ModelBarChart(alr.XeTop2(), new double[]{alr.LanthueXeTop2()}));
+        barChart1.addData(new ModelBarChart(alr.XeTop3(), new double[]{alr.LanthueXeTop3()}));
+        barChart1.addData(new ModelBarChart(alr.XeTop4(), new double[]{alr.LanthueXeTop4()}));
+        barChart1.addData(new ModelBarChart(alr.XeTop5(), new double[]{alr.LanthueXeTop5()}));
+        barChart1.start();
     }
 
     private void initCardData() {
         Icon icon1 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.PEOPLE, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
-        card1.setData(new ModelCard("New Student", 5100, 20, icon1));
+        card1.setData(new ModelCard("Doanh Thu", alr.DoanhThu(), 20, icon1));
         Icon icon2 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.MONETIZATION_ON, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
-        card2.setData(new ModelCard("Income", 2000, 60, icon2));
+        card2.setData(new ModelCard("Số Nhân Viên", alr.NhanVien(), 60, icon2));
         Icon icon3 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.SHOPPING_BASKET, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
-        card3.setData(new ModelCard("Expense", 3000, 80, icon3));
+        card3.setData(new ModelCard("Số Đơn Hàng", alr.HD(), 80, icon3));
         Icon icon4 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.BUSINESS_CENTER, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
         card4.setData(new ModelCard("Other Income", 550, 95, icon4));
     }
 
-    private void initNoticeBoard() {
-        noticeBoard.addDate("04/10/2021");
-        noticeBoard.addNoticeBoard(new ModelNoticeBoard(new Color(94, 49, 238), "Hidemode", "Now", "Sets the hide mode for the component. If the hide mode has been specified in the This hide mode can be overridden by the component constraint."));
-        noticeBoard.addNoticeBoard(new ModelNoticeBoard(new Color(218, 49, 238), "Tag", "2h ago", "Tags the component with metadata name that can be used by the layout engine. The tag can be used to explain for the layout manager what the components is showing, such as an OK or Cancel button."));
-        noticeBoard.addDate("03/10/2021");
-        noticeBoard.addNoticeBoard(new ModelNoticeBoard(new Color(32, 171, 43), "Further Reading", "12:30 PM", "There are more information to digest regarding MigLayout. The resources are all available at www.migcomponents.com"));
-        noticeBoard.addNoticeBoard(new ModelNoticeBoard(new Color(50, 93, 215), "Span", "10:30 AM", "Spans the current cell (merges) over a number of cells. Practically this means that this cell and the count number of cells will be treated as one cell and the component can use the space that all these cells have."));
-        noticeBoard.addNoticeBoard(new ModelNoticeBoard(new Color(27, 188, 204), "Skip ", "9:00 AM", "Skips a number of cells in the flow. This is used to jump over a number of cells before the next free cell is looked for. The skipping is done before this component is put in a cell and thus this cells is affected by it. \"count\" defaults to 1 if not specified."));
-        noticeBoard.addNoticeBoard(new ModelNoticeBoard(new Color(238, 46, 57), "Push", "7:15 AM", "Makes the row and/or column that the component is residing in grow with \"weight\". This can be used instead of having a \"grow\" keyword in the column/row constraints."));
-        noticeBoard.scrollToTop();
-    }
+
 
     private void showMessage(String message) {
         Message obj = new Message(Main.getFrames()[0], true);
@@ -92,14 +119,14 @@ public class Form_Home extends javax.swing.JPanel {
         card3 = new com.raven.component.Card();
         card4 = new com.raven.component.Card();
         panelTransparent1 = new com.raven.swing.PanelTransparent();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        table1 = new com.raven.swing.table.Table();
         jLabel5 = new javax.swing.JLabel();
+        barChart1 = new com.raven.bar.BarChart();
         panelTransparent2 = new com.raven.swing.PanelTransparent();
-        noticeBoard = new com.raven.swing.noticeboard.NoticeBoard();
-        jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        pieChart1 = new com.raven.javaswingdev.chart.PieChart();
+        panelShadow1 = new raven.panel.PanelShadow();
+        curveLineChart1 = new raven.chart.CurveLineChart();
 
         card1.setColorGradient(new java.awt.Color(211, 28, 215));
 
@@ -118,30 +145,9 @@ public class Form_Home extends javax.swing.JPanel {
 
         panelTransparent1.setTransparent(0.5F);
 
-        table1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Name", "Gender", "Course", "Fees", "Action"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(table1);
-        if (table1.getColumnModel().getColumnCount() > 0) {
-            table1.getColumnModel().getColumn(0).setPreferredWidth(150);
-        }
-
         jLabel5.setFont(new java.awt.Font("sansserif", 1, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(76, 76, 76));
-        jLabel5.setText("Data Student");
+        jLabel5.setText("Top Những Mặt Hàng Bán Chạy");
         jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
 
         javax.swing.GroupLayout panelTransparent1Layout = new javax.swing.GroupLayout(panelTransparent1);
@@ -150,11 +156,11 @@ public class Form_Home extends javax.swing.JPanel {
             panelTransparent1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTransparent1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTransparent1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTransparent1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                .addComponent(jLabel5)
+                .addContainerGap(394, Short.MAX_VALUE))
+            .addGroup(panelTransparent1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(barChart1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelTransparent1Layout.setVerticalGroup(
@@ -163,20 +169,15 @@ public class Form_Home extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(barChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panelTransparent2.setTransparent(0.5F);
 
-        jLabel3.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(105, 105, 105));
-        jLabel3.setText("Simple Miglayout API Doc");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
-
         jLabel2.setFont(new java.awt.Font("sansserif", 1, 15)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(76, 76, 76));
-        jLabel2.setText("Notice Board");
+        jLabel2.setText("Số Hàng Đã Bán Và Số Lượng Còn Lại");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
 
         jLabel4.setOpaque(true);
@@ -188,13 +189,14 @@ public class Form_Home extends javax.swing.JPanel {
             .addGroup(panelTransparent2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTransparent2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(noticeBoard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTransparent2Layout.createSequentialGroup()
-                        .addGroup(panelTransparent2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 257, Short.MAX_VALUE)))
+                    .addGroup(panelTransparent2Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelTransparent2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelTransparent2Layout.setVerticalGroup(
@@ -202,13 +204,36 @@ public class Form_Home extends javax.swing.JPanel {
             .addGroup(panelTransparent2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
+                .addGroup(panelTransparent2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTransparent2Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelTransparent2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(8, Short.MAX_VALUE))
+        );
+
+        panelShadow1.setBackground(new java.awt.Color(153, 204, 255));
+
+        curveLineChart1.setBackground(new java.awt.Color(55, 69, 83));
+        curveLineChart1.setForeground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout panelShadow1Layout = new javax.swing.GroupLayout(panelShadow1);
+        panelShadow1.setLayout(panelShadow1Layout);
+        panelShadow1Layout.setHorizontalGroup(
+            panelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelShadow1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jLabel3)
-                .addGap(9, 9, 9)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(noticeBoard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(curveLineChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 1053, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+        panelShadow1Layout.setVerticalGroup(
+            panelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelShadow1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(curveLineChart1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -227,13 +252,16 @@ public class Form_Home extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(card4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(panelTransparent1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(panelTransparent1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(panelTransparent2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(panelShadow1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,26 +276,28 @@ public class Form_Home extends javax.swing.JPanel {
                     .addComponent(card4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelTransparent2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelTransparent1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(panelTransparent1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelTransparent2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelShadow1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.raven.bar.BarChart barChart1;
     private com.raven.component.Card card1;
     private com.raven.component.Card card2;
     private com.raven.component.Card card3;
     private com.raven.component.Card card4;
+    private raven.chart.CurveLineChart curveLineChart1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private com.raven.swing.noticeboard.NoticeBoard noticeBoard;
+    private raven.panel.PanelShadow panelShadow1;
     private com.raven.swing.PanelTransparent panelTransparent1;
     private com.raven.swing.PanelTransparent panelTransparent2;
-    private com.raven.swing.table.Table table1;
+    private com.raven.javaswingdev.chart.PieChart pieChart1;
     // End of variables declaration//GEN-END:variables
 }

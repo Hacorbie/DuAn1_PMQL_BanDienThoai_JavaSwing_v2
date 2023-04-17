@@ -75,7 +75,7 @@ public class FormBanHang extends javax.swing.JPanel {
                     kh.getId(),
                     kh.getIdHang() == 1 ? "Apple":"SamSung",
                     kh.getIdRam(),
-                    kh.getIdMauSac(),
+                    kh.getIdMauSac()== 1 ? "Vàng":"Tím",
                     kh.getDonGia(),
                     kh.getTenSanPham()
                          
@@ -245,6 +245,11 @@ public class FormBanHang extends javax.swing.JPanel {
         jLabel2.setText("Sản Phẩm");
 
         jButton1.setText("Tìm Kiếm");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         cbbSP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất Cả", "SamSung", "Apple" }));
         cbbSP.addItemListener(new java.awt.event.ItemListener() {
@@ -705,7 +710,7 @@ public class FormBanHang extends javax.swing.JPanel {
         else{
             tenn = tblSP.getValueAt(row, 5).toString();
             maa  = tblSP.getValueAt(row, 0).toString();
-            soluongg = Integer.parseInt(tblSP.getValueAt(row, 3).toString());
+            soluongg = 1;
             dongiaa = Double.parseDouble(tblSP.getValueAt(row, 4).toString());
             thanhtienn = soluongg*dongiaa;
         }
@@ -937,6 +942,52 @@ public class FormBanHang extends javax.swing.JPanel {
             LoadData();
         }
     }//GEN-LAST:event_cbbSPItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String abc = txtTimKiem.getText();
+        if (abc.equals("Tím")) {
+            abc = "1";
+            ArrayList<ChiTietSanPham> listsp= rp.getListSPTK(abc);
+        defaultTableModel = (DefaultTableModel) tblSP.getModel();
+        defaultTableModel.setRowCount(0);
+        
+            for (ChiTietSanPham kh : listsp) {                 
+                Object[] rowData ={
+                    
+                    kh.getId(),
+                    kh.getIdHang() == 1 ? "Apple":"SamSung",
+                    kh.getIdRam(),
+                    kh.getIdMauSac()== 1 ? "Vàng":"Tím",
+                    kh.getDonGia(),
+                    kh.getTenSanPham()
+                         
+                };
+            defaultTableModel.addRow(rowData);
+            
+        }
+        }
+        abc = "2";
+        ArrayList<ChiTietSanPham> listsp= rp.getListSPTK(abc);
+        defaultTableModel = (DefaultTableModel) tblSP.getModel();
+        defaultTableModel.setRowCount(0);
+        
+            for (ChiTietSanPham kh : listsp) {                 
+                Object[] rowData ={
+                    
+                    kh.getId(),
+                    kh.getIdHang() == 1 ? "Apple":"SamSung",
+                    kh.getIdRam(),
+                    kh.getIdMauSac()== 1 ? "Vàng":"Tím",
+                    kh.getDonGia(),
+                    kh.getTenSanPham()
+                         
+                };
+            defaultTableModel.addRow(rowData);
+            
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTaoDonHang;
