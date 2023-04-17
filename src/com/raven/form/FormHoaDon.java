@@ -2,6 +2,7 @@ package com.raven.form;
 
 import com.componentfolders.Model.HDCT;
 import com.componentfolders.Model.HoaDon;
+import com.componentfolders.Repo.HoaDonRepository;
 import com.componentfolders.Service.Impl.HoaDonServiceImpl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class FormHoaDon extends javax.swing.JPanel {
 
     private DefaultTableModel dtm;
     private HoaDonServiceImpl hoaDonServiceImpl = new HoaDonServiceImpl();
+    private HoaDonRepository rp = new HoaDonRepository();
 
     public FormHoaDon() {
         initComponents();
@@ -304,16 +306,17 @@ public class FormHoaDon extends javax.swing.JPanel {
     private void tblHoaDon3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDon3MouseClicked
 
         int row = tblHoaDon3.getSelectedRow();
-        dtm = (DefaultTableModel) tblHoaDon3.getModel();
-//        dtm.setRowCount(0);
-        List<HDCT> listHDCT = hoaDonServiceImpl.gettimma(tblHoaDon3.getValueAt(row, 0).toString());
-        for (HDCT hdct : listHDCT) {
+        int adc = Integer.parseInt(tblHoaDon3.getValueAt(row, 0).toString());
+        dtm = (DefaultTableModel) tblSP.getModel();
+        dtm.setRowCount(0);
+        List<HoaDon> listHDCT = rp.getAllHDCT(adc);
+        for (HoaDon hdct : listHDCT) {
             Object[] toRowData = {
-                hdct.getHd().getMAHD(),
-                hdct.getCtsp().getMaSanPham(),
-                hdct.getCtsp().getTenSanPham(),
-                hdct.getSOLUONG(),
-                hdct.getDONGIA(),};
+                hdct.getID(),
+                hdct.getTRANGTHAI(),
+                hdct.getMota(),
+                1,
+                hdct.getTONGTIEN(),};
             dtm.addRow(toRowData);
 //            dtm.addRow(new Object[]{
 //                hdct.getHd().getMAHD(),
