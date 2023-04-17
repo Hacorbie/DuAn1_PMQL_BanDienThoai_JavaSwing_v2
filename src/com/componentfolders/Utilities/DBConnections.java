@@ -19,8 +19,8 @@ public class DBConnections {
     public static final String HOSTNAME = "localhost";
     public static final String PORT = "1433";
     public static final String DBNAME = "QLCHDT";
-    public static final String USERNAME = "sa";
-    public static final String PASSWORD = "123123";
+    public static final String USERNAME = "DIUNT";
+    public static final String PASSWORD = "123456";
     private static Connection con;
 
     /**
