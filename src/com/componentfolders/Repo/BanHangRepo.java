@@ -43,6 +43,33 @@ public class BanHangRepo {
         }
         return listsp;
     }
+        public ArrayList<ChiTietSanPham> getListSPTK(String txt){
+        ArrayList<ChiTietSanPham> listsp = new ArrayList<>();
+        String sql = "select SANPHAMCT.ID, SANPHAMCT.IDHANG, SANPHAMCT.IDRAM, SANPHAMCT.IDMS,SANPHAMCT.DONGIA,SANPHAMCT.TENSP from SANPHAMCT Where TRANGTHAI = 1 and ID = ? or IDMS = ? or TENSP = ?";
+        try(Connection con = connections.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setObject(1, txt);
+            ps.setObject(2, txt);
+            ps.setObject(3, txt);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                ChiTietSanPham sp = new ChiTietSanPham();
+                sp.setId(rs.getInt(1));
+                sp.setIdHang(rs.getInt(2));
+                sp.setIdRam(rs.getInt(3));
+                sp.setIdMauSac(rs.getInt(4));
+                sp.setDonGia(rs.getInt(5));
+                sp.setTenSanPham(rs.getString(6));
+
+            
+                listsp.add(sp);
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listsp;
+    }
         public int idhoadon(){
         int a = 0;
         String sql = "select top 1 ID from hoadon order by ID desc";
